@@ -1,0 +1,10 @@
+[Unit]
+Description=tbwatch directory watcher daemon
+
+[Service]
+StandardInput=null
+ExecStart=/usr/sbin/tbwatch
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,56 @@
+
+tbwatch:  watch filesystem paths and report on events in Linux
+
+intended use model:  to log accesses to directories and files that are not expected to be accessed and/or modified.
+                     The default code base reports a few important accesses, but this can be tailored by modifying
+                     the list of events in a configuration file.
+                     You may not want to watch frequently accessed directories such as /tmp or your log 
+                     will fill up fast!  Or, you can cut down on the events reported.
+
+run model:  runs as a systemd service.
+
+requirements: Linux kernel version 2.6.13 or greater for inotify
+              C++11 compiler
+              Linux OS with systemd active 
+              systemd service file (included)
+
+usage:  needs a input configuration file specified on the command line (-c) option or a file named tbwatchpath.cfg
+        in the /etc/ directory.
+        This configuration specifies the paths to watch and the events to watch.
+
+        For instance:
+        Example watchpaths.cfg
+
+            #EXAMPLE CONFIG          
+            #comments will be ignored          
+
+            #default notification is IN_CREATE | IN_DELETE | IN_MODIFY
+            watch=/watched_dir
+
+            #specific notification types can be given like so:
+            watch=/other_watched_dir:IN_OPEN:IN_DELETE
+            #END EXAMPLE CONFIG
+
+        It recognizes the keys: watch
+
+        tbwatch -h    - provides basic usage
+        tbwatch -doc  - provides more detailed help 
+
+        #EVENTS
+        events are logged to the syslog (e.g. /var/log/syslog)
+        events are tagged with tbwatch (e.g. cat /var/log/syslog | grep tbwatch)
+
+building: there is a default service file and a default configuration 
+          edit these to your liking
+          
+          In the Makefile directory
+
+          make
+          sudo make install
+          sudo make uninstall
+
+          (edit paths in Makefile to suit your system)
+
+notes:  requires systemd, this means you if you're running on Ubuntu, you will need 15.04
+        check your system 
+##
